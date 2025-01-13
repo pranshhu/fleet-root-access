@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sidebar"
 import {
   LayoutDashboard,
-  Robot,
+  Bot,
   BarChart3,
   Bell,
   Users2,
@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom"
 
 const navigationItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-  { icon: Robot, label: "Robots", href: "/robots" },
+  { icon: Bot, label: "Robots", href: "/robots" },
   { icon: BarChart3, label: "Analytics", href: "/analytics" },
   { icon: Bell, label: "Alerts", href: "/alerts" },
   { icon: Users2, label: "Team", href: "/team" },
