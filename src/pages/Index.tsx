@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
@@ -15,7 +15,8 @@ const Index = () => {
         toast.success("Successfully signed in!");
         navigate("/dashboard");
       }
-      if (event === 'SIGNED_UP') {
+      // Handle other auth state changes through the event listener
+      if (event === 'USER_SIGNED_UP') {
         toast.success("Account created successfully!");
       }
       if (event === 'PASSWORD_RECOVERY') {
@@ -26,12 +27,33 @@ const Index = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  // Set up a separate auth state listener for error handling
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
+      if (event === 'USER_ERROR') {
+        const { error } = await supabase.auth.getSession();
+        if (error) {
+          const errorMessage = getErrorMessage(error);
+          toast.error(errorMessage);
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   const getErrorMessage = (error: AuthError) => {
-    const errorMessage = JSON.parse(error.message);
-    if (errorMessage.code === 'weak_password') {
-      return 'Password should be at least 6 characters long';
+    try {
+      if (error.message.includes('invalid_credentials')) {
+        return 'Invalid email or password';
+      }
+      if (error.message.includes('weak_password')) {
+        return 'Password should be at least 6 characters long';
+      }
+      return error.message;
+    } catch {
+      return 'An error occurred during authentication';
     }
-    return errorMessage.message || 'An error occurred during authentication';
   };
 
   return (
@@ -71,9 +93,6 @@ const Index = () => {
           }}
           theme="dark"
           providers={[]}
-          onError={(error) => {
-            toast.error(getErrorMessage(error));
-          }}
         />
       </div>
     </div>
