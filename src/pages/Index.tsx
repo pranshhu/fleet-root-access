@@ -1,23 +1,38 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { AuthError } from "@supabase/supabase-js";
 
 const Index = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" && session) {
+      if (event === 'SIGNED_IN' && session) {
         toast.success("Successfully signed in!");
         navigate("/dashboard");
+      }
+      if (event === 'SIGNED_UP') {
+        toast.success("Account created successfully!");
+      }
+      if (event === 'PASSWORD_RECOVERY') {
+        toast.info("Check your email for the password reset link");
       }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  const getErrorMessage = (error: AuthError) => {
+    const errorMessage = JSON.parse(error.message);
+    if (errorMessage.code === 'weak_password') {
+      return 'Password should be at least 6 characters long';
+    }
+    return errorMessage.message || 'An error occurred during authentication';
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 dark">
@@ -51,10 +66,14 @@ const Index = () => {
               label: 'block text-sm font-medium text-gray-300 mb-1',
               loader: 'border-gray-300',
               message: 'text-gray-300',
+              anchor: 'text-blue-400 hover:text-blue-300',
             }
           }}
           theme="dark"
           providers={[]}
+          onError={(error) => {
+            toast.error(getErrorMessage(error));
+          }}
         />
       </div>
     </div>
