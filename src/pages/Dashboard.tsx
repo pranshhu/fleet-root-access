@@ -20,18 +20,9 @@ const Dashboard = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
+      <div className="min-h-screen flex w-full bg-background dark">
         <main className="flex-1 p-8">
           <h1 className="text-2xl font-bold">Dashboard</h1>
-          <button
-            onClick={async () => {
-              await supabase.auth.signOut();
-              navigate("/");
-            }}
-            className="mt-4 px-4 py-2 bg-destructive text-destructive-foreground rounded-md hover:bg-destructive/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-destructive"
-          >
-            Sign Out
-          </button>
         </main>
         <DashboardNav />
       </div>

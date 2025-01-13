@@ -15,8 +15,7 @@ const Index = () => {
         toast.success("Successfully signed in!");
         navigate("/dashboard");
       }
-      // Handle other auth state changes through the event listener
-      if (event === 'USER_SIGNED_UP') {
+      if (event === 'SIGNED_UP') {
         toast.success("Account created successfully!");
       }
       if (event === 'PASSWORD_RECOVERY') {
@@ -27,10 +26,9 @@ const Index = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  // Set up a separate auth state listener for error handling
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
-      if (event === 'USER_ERROR') {
+      if (event === 'ERROR') {
         const { error } = await supabase.auth.getSession();
         if (error) {
           const errorMessage = getErrorMessage(error);
