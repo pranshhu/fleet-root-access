@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Rocket, AlertTriangle, Battery, Wifi } from "lucide-react";
+import { Activity, Battery, Robot, Signal, Thermometer, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardNav } from "@/components/DashboardNav";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -76,40 +76,44 @@ const Dashboard = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background dark">
+      <div className="min-h-screen flex w-full bg-[#1A1F2C] dark">
         <main className="flex-1 p-8 space-y-8">
           {/* Stats Overview */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
-              icon={<Rocket className="w-6 h-6" />}
+              icon={<Robot className="w-6 h-6" />}
               title="Active Robots"
               value="12"
               change={{ value: "2.5%", positive: true }}
+              className="bg-[#221F26] border-none"
             />
             <StatCard
-              icon={<AlertTriangle className="w-6 h-6" />}
-              title="Critical Alerts"
-              value="3"
-              change={{ value: "1.5%", positive: false }}
+              icon={<Activity className="w-6 h-6" />}
+              title="Total Missions"
+              value="48"
+              change={{ value: "10%", positive: true }}
+              className="bg-[#221F26] border-none"
             />
             <StatCard
               icon={<Battery className="w-6 h-6" />}
               title="Avg. Battery"
               value="78%"
               change={{ value: "0.8%", positive: false }}
+              className="bg-[#221F26] border-none"
             />
             <StatCard
-              icon={<Wifi className="w-6 h-6" />}
+              icon={<Signal className="w-6 h-6" />}
               title="Connection Status"
               value="98%"
               change={{ value: "0.2%", positive: true }}
+              className="bg-[#221F26] border-none"
             />
           </div>
 
           {/* Active Robots */}
           <div>
-            <h2 className="text-2xl font-bold mb-4">Active Robots</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <h2 className="text-2xl font-bold mb-4 text-white">Active Robots</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {mockRobots.map((robot) => (
                 <RobotCard key={robot.name} {...robot} />
               ))}
