@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Activity, Battery, Robot, Signal, Thermometer, Users } from "lucide-react";
+import { Activity, Battery, Bot, Signal, Thermometer, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardNav } from "@/components/DashboardNav";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -78,10 +78,9 @@ const Dashboard = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-[#1A1F2C] dark">
         <main className="flex-1 p-8 space-y-8">
-          {/* Stats Overview */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
-              icon={<Robot className="w-6 h-6" />}
+              icon={<Bot className="w-6 h-6" />}
               title="Active Robots"
               value="12"
               change={{ value: "2.5%", positive: true }}
@@ -110,7 +109,6 @@ const Dashboard = () => {
             />
           </div>
 
-          {/* Active Robots */}
           <div>
             <h2 className="text-2xl font-bold mb-4 text-white">Active Robots</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -120,7 +118,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Recent Alerts */}
           <div className="max-w-2xl">
             <RecentAlerts alerts={mockAlerts} />
           </div>
