@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Robots from "./pages/Robots";
+import RobotDetails from "./pages/RobotDetails";
 import Analytics from "./pages/Analytics";
 import Alerts from "./pages/Alerts";
 import Team from "./pages/Team";
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/robots" element={<Robots />} />
+          <Route path="/robots/:id" element={<RobotDetails />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/alerts" element={<Alerts />} />
           <Route path="/team" element={<Team />} />
