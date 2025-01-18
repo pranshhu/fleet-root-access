@@ -14,20 +14,22 @@ interface StatCardProps {
 
 export function StatCard({ icon, title, value, change, className }: StatCardProps) {
   return (
-    <Card className={cn("p-6 flex items-center gap-4", className)}>
-      <div className="p-3 rounded-lg bg-muted text-muted-foreground">{icon}</div>
-      <div className="flex-1">
-        <p className="text-sm text-muted-foreground">{title}</p>
-        <div className="flex items-center gap-2">
-          <h3 className="text-2xl font-bold text-foreground">{value}</h3>
-          {change && (
-            <span className={cn(
-              "text-sm",
-              change.positive ? "text-green-500" : "text-red-500"
-            )}>
-              {change.positive ? "+" : ""}{change.value}
-            </span>
-          )}
+    <Card className={cn("p-4 md:p-6 bg-[#221F26] border-gray-800/50", className)}>
+      <div className="flex items-center gap-3 md:gap-4">
+        <div className="p-2 md:p-3 rounded-lg bg-[#2D2B35] text-gray-400">{icon}</div>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs md:text-sm text-gray-400 truncate">{title}</p>
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg md:text-2xl font-bold text-white truncate">{value}</h3>
+            {change && (
+              <span className={cn(
+                "text-xs md:text-sm whitespace-nowrap",
+                change.positive ? "text-green-500" : "text-red-500"
+              )}>
+                {change.positive ? "+" : ""}{change.value}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </Card>

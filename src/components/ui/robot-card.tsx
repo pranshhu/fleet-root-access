@@ -29,29 +29,29 @@ export function RobotCard({ id = "1", name, status, battery, temperature, signal
 
   return (
     <Card 
-      className="p-6 space-y-4 bg-card border-border cursor-pointer hover:bg-secondary/50 transition-colors"
+      className="p-4 md:p-6 space-y-3 md:space-y-4 bg-[#221F26] border-gray-800/50 hover:bg-[#2A2730] transition-all cursor-pointer"
       onClick={() => navigate(`/robots/${id}`)}
     >
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className={cn("w-2 h-2 rounded-full", statusColor[status])} />
-          <h3 className="font-medium text-card-foreground">{name}</h3>
+        <div className="flex items-center gap-2 min-w-0">
+          <div className={cn("w-2 h-2 rounded-full shrink-0", statusColor[status])} />
+          <h3 className="font-medium text-white truncate">{name}</h3>
         </div>
-        <span className="text-sm text-muted-foreground">{statusText[status]}</span>
+        <span className="text-xs md:text-sm text-gray-400 shrink-0">{statusText[status]}</span>
       </div>
       
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-2 md:gap-4">
         <div className="flex flex-col items-center gap-1">
-          <Battery className="text-muted-foreground" />
-          <span className="text-sm font-medium text-card-foreground">{battery}%</span>
+          <Battery className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
+          <span className="text-xs md:text-sm font-medium text-white">{battery}%</span>
         </div>
         <div className="flex flex-col items-center gap-1">
-          <Thermometer className="text-muted-foreground" />
-          <span className="text-sm font-medium text-card-foreground">{temperature}°C</span>
+          <Thermometer className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
+          <span className="text-xs md:text-sm font-medium text-white">{temperature}°C</span>
         </div>
         <div className="flex flex-col items-center gap-1">
-          <Signal className="text-muted-foreground" />
-          <span className="text-sm font-medium text-card-foreground">{signal}%</span>
+          <Signal className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
+          <span className="text-xs md:text-sm font-medium text-white">{signal}%</span>
         </div>
       </div>
     </Card>

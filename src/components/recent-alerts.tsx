@@ -20,20 +20,20 @@ export function RecentAlerts({ alerts }: RecentAlertsProps) {
   };
 
   return (
-    <Card className="bg-card border-border">
-      <CardHeader>
-        <CardTitle className="text-lg font-medium text-card-foreground">Recent Alerts</CardTitle>
+    <Card className="bg-[#221F26] border-gray-800/50">
+      <CardHeader className="p-4 md:p-6">
+        <CardTitle className="text-lg md:text-xl font-medium text-white">Recent Alerts</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="p-4 md:p-6 pt-0 space-y-3 md:space-y-4">
         {alerts.map((alert) => (
           <div
             key={alert.id}
-            className="flex items-center gap-3 p-3 rounded-lg bg-secondary"
+            className="flex items-center gap-3 p-3 rounded-lg bg-[#2D2B35]"
           >
-            <div className={cn("w-2 h-2 rounded-full", severityStyles[alert.severity])} />
-            <div className="flex-1">
-              <p className="text-sm text-card-foreground">{alert.message}</p>
-              <p className="text-xs text-muted-foreground">{alert.timestamp}</p>
+            <div className={cn("w-2 h-2 rounded-full shrink-0", severityStyles[alert.severity])} />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm text-white truncate">{alert.message}</p>
+              <p className="text-xs text-gray-400">{alert.timestamp}</p>
             </div>
           </div>
         ))}

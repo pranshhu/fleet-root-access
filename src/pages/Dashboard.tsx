@@ -77,31 +77,31 @@ const Dashboard = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-[#1A1F2C] dark">
-        <main className="flex-1 p-8 space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <main className="flex-1 p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 max-w-[1600px] mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             <StatCard
-              icon={<Bot className="w-6 h-6" />}
+              icon={<Bot className="w-5 h-5 md:w-6 md:h-6" />}
               title="Active Robots"
               value="12"
               change={{ value: "2.5%", positive: true }}
               className="bg-[#221F26] border-none"
             />
             <StatCard
-              icon={<Activity className="w-6 h-6" />}
+              icon={<Activity className="w-5 h-5 md:w-6 md:h-6" />}
               title="Total Missions"
               value="48"
               change={{ value: "10%", positive: true }}
               className="bg-[#221F26] border-none"
             />
             <StatCard
-              icon={<Battery className="w-6 h-6" />}
+              icon={<Battery className="w-5 h-5 md:w-6 md:h-6" />}
               title="Avg. Battery"
               value="78%"
               change={{ value: "0.8%", positive: false }}
               className="bg-[#221F26] border-none"
             />
             <StatCard
-              icon={<Signal className="w-6 h-6" />}
+              icon={<Signal className="w-5 h-5 md:w-6 md:h-6" />}
               title="Connection Status"
               value="98%"
               change={{ value: "0.2%", positive: true }}
@@ -110,15 +110,15 @@ const Dashboard = () => {
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold mb-4 text-white">Active Robots</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <h2 className="text-xl md:text-2xl font-bold mb-4 text-white">Active Robots</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
               {mockRobots.map((robot) => (
                 <RobotCard key={robot.name} {...robot} />
               ))}
             </div>
           </div>
 
-          <div className="max-w-2xl">
+          <div className="w-full max-w-3xl">
             <RecentAlerts alerts={mockAlerts} />
           </div>
         </main>

@@ -12,10 +12,9 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardNav } from "@/components/DashboardNav";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { StatCard } from "@/components/ui/stat-card";
-import { RecentAlerts } from "@/components/recent-alerts";
+import { cn } from "@/lib/utils";
 
 const mockAlerts = [
   {
@@ -56,126 +55,125 @@ const RobotDetails = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background dark">
-        <main className="flex-1 p-8 space-y-8">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/robots")}
-              className="text-muted-foreground hover:text-primary"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </Button>
-            <h1 className="text-2xl font-bold text-foreground">Robot-A1</h1>
-            <div className="flex items-center gap-2 ml-4">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-sm text-muted-foreground">Online</span>
+        <main className="flex-1 relative">
+          {/* Back button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/robots")}
+            className="absolute top-4 left-4 z-50 text-white bg-black/50 hover:bg-black/60"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </Button>
+
+          {/* Video feed container */}
+          <div className="relative w-full h-screen bg-black">
+            {/* Placeholder for video feed - replace with actual video component */}
+            <div className="absolute inset-0 flex items-center justify-center text-gray-500">
+              Live Robot Feed
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatCard
-              icon={<Battery className="w-6 h-6" />}
-              title="Battery Level"
-              value="87%"
-              change={{ value: "2%", positive: false }}
-            />
-            <StatCard
-              icon={<Thermometer className="w-6 h-6" />}
-              title="Temperature"
-              value="42°C"
-              change={{ value: "3°C", positive: false }}
-            />
-            <StatCard
-              icon={<Signal className="w-6 h-6" />}
-              title="Signal Strength"
-              value="95%"
-              change={{ value: "1%", positive: true }}
-            />
-            <StatCard
-              icon={<Timer className="w-6 h-6" />}
-              title="Uptime"
-              value="24h"
-              change={{ value: "100%", positive: true }}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg font-medium">
-                  System Resources
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">CPU Usage</span>
-                    <span className="text-foreground">45%</span>
-                  </div>
-                  <div className="h-2 bg-secondary rounded-full">
-                    <div className="h-full w-[45%] bg-primary rounded-full" />
+            {/* Overlay container */}
+            <div className="absolute inset-0 p-4">
+              {/* Top row - Title and Status */}
+              <div className="flex items-center gap-6 mb-8 mt-16 px-4">
+                <div className="flex items-center gap-4">
+                  <h1 className="text-2xl font-bold text-white">Robot-A1</h1>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-green-500" />
+                    <span className="text-sm text-white/80">Online</span>
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">RAM Usage</span>
-                    <span className="text-foreground">32%</span>
-                  </div>
-                  <div className="h-2 bg-secondary rounded-full">
-                    <div className="h-full w-[32%] bg-primary rounded-full" />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Storage</span>
-                    <span className="text-foreground">78%</span>
-                  </div>
-                  <div className="h-2 bg-secondary rounded-full">
-                    <div className="h-full w-[78%] bg-primary rounded-full" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg font-medium">
-                  Current Mission
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h3 className="font-medium text-foreground">
-                        Warehouse Inspection
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Section A-3, Floor 2
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium text-foreground">
-                        Progress
-                      </p>
-                      <p className="text-sm text-muted-foreground">67%</p>
+                {/* Status Indicators */}
+                <div className="flex items-center gap-6 bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
+                  <div className="flex items-center gap-2">
+                    <Battery className="h-5 w-5 text-green-500" />
+                    <span className="text-white font-medium">87%</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Thermometer className="h-5 w-5 text-yellow-500" />
+                    <span className="text-white font-medium">42°C</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Signal className="h-5 w-5 text-blue-500" />
+                    <span className="text-white font-medium">95%</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Cpu className="h-5 w-5 text-purple-500" />
+                    <span className="text-white font-medium">45%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats overlay - right side */}
+              <div className="absolute top-24 right-4 space-y-4 w-80">
+                {/* System Resources */}
+                <Card className="bg-black/50 border-0 backdrop-blur-sm text-white p-4">
+                  <div className="space-y-4">
+                    <h3 className="font-semibold flex items-center gap-2">
+                      <Cpu className="h-5 w-5" />
+                      System Resources
+                    </h3>
+                    <div className="space-y-3">
+                      <div>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>CPU</span>
+                          <span>45%</span>
+                        </div>
+                        <div className="h-2 bg-white/20 rounded-full">
+                          <div className="h-full w-[45%] bg-purple-500 rounded-full" />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>RAM</span>
+                          <span>32%</span>
+                        </div>
+                        <div className="h-2 bg-white/20 rounded-full">
+                          <div className="h-full w-[32%] bg-purple-500 rounded-full" />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>Storage</span>
+                          <span>78%</span>
+                        </div>
+                        <div className="h-2 bg-white/20 rounded-full">
+                          <div className="h-full w-[78%] bg-purple-500 rounded-full" />
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="h-2 bg-secondary rounded-full">
-                    <div className="h-full w-[67%] bg-primary rounded-full" />
-                  </div>
-                  <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>Started: 2h ago</span>
-                    <span>Est. completion: 1h</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                </Card>
+              </div>
 
-          <div className="max-w-2xl">
-            <RecentAlerts alerts={mockAlerts} />
+              {/* Alerts overlay - bottom */}
+              <div className="absolute bottom-4 left-4 right-4">
+                <Card className="bg-black/50 border-0 backdrop-blur-sm text-white p-4">
+                  <h3 className="font-semibold mb-3">Recent Alerts</h3>
+                  <div className="space-y-2">
+                    {mockAlerts.map((alert) => (
+                      <div
+                        key={alert.id}
+                        className="flex items-center gap-2 text-sm"
+                      >
+                        <div 
+                          className={cn(
+                            "w-2 h-2 rounded-full",
+                            alert.severity === "critical" && "bg-red-500",
+                            alert.severity === "warning" && "bg-yellow-500",
+                            alert.severity === "info" && "bg-blue-500"
+                          )}
+                        />
+                        <span className="flex-1">{alert.message}</span>
+                        <span className="text-white/60">{alert.timestamp}</span>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+            </div>
           </div>
         </main>
         <DashboardNav />
