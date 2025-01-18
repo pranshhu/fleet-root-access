@@ -25,33 +25,44 @@ const Index = () => {
     };
   }, [navigate]);
 
-  const getErrorMessage = (error: AuthError) => {
-    return error.message || "An error occurred during authentication";
-  };
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="w-full max-w-sm space-y-4">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold tracking-tight text-white">Welcome back</h1>
-          <p className="text-sm text-muted-foreground">Sign in to your account</p>
+    <div className="flex min-h-screen items-center justify-center bg-[#1A1F2C] p-4">
+      <div className="w-full max-w-sm space-y-6">
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight text-white">Welcome back</h1>
+          <p className="text-sm text-gray-400">Sign in to your account to continue</p>
         </div>
-        <Auth
-          supabaseClient={supabase}
-          appearance={{
-            theme: ThemeSupa,
-            variables: {
-              default: {
-                colors: {
-                  brand: '#000000',
-                  brandAccent: '#333333',
-                }
-              }
-            }
-          }}
-          theme="dark"
-          providers={[]}
-        />
+        <div className="bg-[#221F26] p-6 rounded-lg shadow-xl border border-gray-800">
+          <Auth
+            supabaseClient={supabase}
+            appearance={{
+              theme: ThemeSupa,
+              variables: {
+                default: {
+                  colors: {
+                    brand: '#4F46E5',
+                    brandAccent: '#6366F1',
+                    brandButtonText: 'white',
+                    defaultButtonBackground: '#2D2B35',
+                    defaultButtonBackgroundHover: '#363340',
+                    inputBackground: '#2D2B35',
+                    inputBorder: '#363340',
+                    inputBorderHover: '#4F46E5',
+                    inputBorderFocus: '#6366F1',
+                  },
+                },
+              },
+              className: {
+                container: 'space-y-4',
+                label: 'text-sm font-medium text-gray-300',
+                input: 'bg-[#2D2B35] border border-gray-700 text-white',
+                button: 'w-full',
+              },
+            }}
+            theme="dark"
+            providers={[]}
+          />
+        </div>
       </div>
     </div>
   );
