@@ -40,7 +40,7 @@ export function DashboardNav() {
   }
 
   return (
-    <Sidebar className="w-14 border-l bg-gray-900" side="right">
+    <Sidebar className="w-14 border-l bg-sidebar-background" side="right">
       <SidebarHeader className="h-2" />
       
       <SidebarContent>
@@ -56,7 +56,7 @@ export function DashboardNav() {
             <SidebarMenuItem key={item.label}>
               <SidebarMenuButton
                 onClick={() => navigate(item.href)}
-                className="w-full flex justify-center p-2 text-gray-300 hover:text-white hover:bg-gray-800"
+                className="w-full flex justify-center p-2 text-sidebar-foreground hover:text-white hover:bg-sidebar-accent"
                 tooltip={item.label}
               >
                 <item.icon className="h-5 w-5" />
@@ -66,7 +66,7 @@ export function DashboardNav() {
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleSignOut}
-              className="w-full flex justify-center p-2 text-red-400 hover:text-red-300 hover:bg-gray-800"
+              className="w-full flex justify-center p-2 text-red-400 hover:text-red-300 hover:bg-sidebar-accent"
               tooltip="Sign Out"
             >
               <LogOut className="h-5 w-5" />
