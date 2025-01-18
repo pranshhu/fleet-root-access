@@ -1,14 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { 
-  Battery, 
-  ChevronLeft, 
-  Cpu, 
-  Signal, 
-  Thermometer, 
-  Timer, 
-  Upload 
-} from "lucide-react";
+import { Battery, ChevronLeft, Cpu, Gauge, MemoryStick as Memory, MonitorPlay, Network, Signal, Thermometer } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardNav } from "@/components/DashboardNav";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -76,7 +68,7 @@ const RobotDetails = () => {
             {/* Overlay container */}
             <div className="absolute inset-0 p-4">
               {/* Top row - Title and Status */}
-              <div className="flex items-center gap-6 mb-8 mt-16 px-4">
+              <div className="flex flex-col gap-4 mt-16 px-4">
                 <div className="flex items-center gap-4">
                   <h1 className="text-2xl font-bold text-white">Robot-A1</h1>
                   <div className="flex items-center gap-2">
@@ -86,66 +78,47 @@ const RobotDetails = () => {
                 </div>
 
                 {/* Status Indicators */}
-                <div className="flex items-center gap-6 bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
-                  <div className="flex items-center gap-2">
-                    <Battery className="h-5 w-5 text-green-500" />
+                <div className="flex items-center gap-4 bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm w-fit text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <Battery className="h-4 w-4 text-green-500" />
                     <span className="text-white font-medium">87%</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Thermometer className="h-5 w-5 text-yellow-500" />
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <Thermometer className="h-4 w-4 text-yellow-500" />
                     <span className="text-white font-medium">42°C</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Signal className="h-5 w-5 text-blue-500" />
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <Signal className="h-4 w-4 text-blue-500" />
                     <span className="text-white font-medium">95%</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Cpu className="h-5 w-5 text-purple-500" />
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <Memory className="h-4 w-4 text-purple-500" />
+                    <span className="text-white font-medium">32%</span>
+                  </div>
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <Cpu className="h-4 w-4 text-emerald-500" />
                     <span className="text-white font-medium">45%</span>
                   </div>
-                </div>
-              </div>
-
-              {/* Stats overlay - right side */}
-              <div className="absolute top-24 right-4 space-y-4 w-80">
-                {/* System Resources */}
-                <Card className="bg-black/50 border-0 backdrop-blur-sm text-white p-4">
-                  <div className="space-y-4">
-                    <h3 className="font-semibold flex items-center gap-2">
-                      <Cpu className="h-5 w-5" />
-                      System Resources
-                    </h3>
-                    <div className="space-y-3">
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>CPU</span>
-                          <span>45%</span>
-                        </div>
-                        <div className="h-2 bg-white/20 rounded-full">
-                          <div className="h-full w-[45%] bg-purple-500 rounded-full" />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>RAM</span>
-                          <span>32%</span>
-                        </div>
-                        <div className="h-2 bg-white/20 rounded-full">
-                          <div className="h-full w-[32%] bg-purple-500 rounded-full" />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>Storage</span>
-                          <span>78%</span>
-                        </div>
-                        <div className="h-2 bg-white/20 rounded-full">
-                          <div className="h-full w-[78%] bg-purple-500 rounded-full" />
-                        </div>
-                      </div>
-                    </div>
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <MonitorPlay className="h-4 w-4 text-pink-500" />
+                    <span className="text-white font-medium">60 FPS</span>
                   </div>
-                </Card>
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <Network className="h-4 w-4 text-orange-500" />
+                    <span className="text-white font-medium">24ms</span>
+                  </div>
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <Gauge className="h-4 w-4 text-indigo-500" />
+                    <span className="text-white font-medium">1.2 m/s</span>
+                  </div>
+                </div>
               </div>
 
               {/* Alerts overlay - bottom */}
