@@ -55,7 +55,7 @@ const RobotDetails = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
+      <div className="min-h-screen flex w-full bg-background dark">
         <main className="flex-1 p-8 space-y-8">
           <div className="flex items-center gap-4">
             <Button
@@ -101,9 +101,9 @@ const RobotDetails = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Card className="bg-card border-border">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-lg font-medium text-card-foreground">
+                <CardTitle className="text-lg font-medium">
                   System Resources
                 </CardTitle>
               </CardHeader>
@@ -111,7 +111,7 @@ const RobotDetails = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">CPU Usage</span>
-                    <span className="text-card-foreground">45%</span>
+                    <span className="text-foreground">45%</span>
                   </div>
                   <div className="h-2 bg-secondary rounded-full">
                     <div className="h-full w-[45%] bg-primary rounded-full" />
@@ -120,7 +120,7 @@ const RobotDetails = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">RAM Usage</span>
-                    <span className="text-card-foreground">32%</span>
+                    <span className="text-foreground">32%</span>
                   </div>
                   <div className="h-2 bg-secondary rounded-full">
                     <div className="h-full w-[32%] bg-primary rounded-full" />
@@ -129,7 +129,7 @@ const RobotDetails = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Storage</span>
-                    <span className="text-card-foreground">78%</span>
+                    <span className="text-foreground">78%</span>
                   </div>
                   <div className="h-2 bg-secondary rounded-full">
                     <div className="h-full w-[78%] bg-primary rounded-full" />
@@ -138,9 +138,9 @@ const RobotDetails = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-card border-border">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-lg font-medium text-card-foreground">
+                <CardTitle className="text-lg font-medium">
                   Current Mission
                 </CardTitle>
               </CardHeader>
@@ -148,7 +148,7 @@ const RobotDetails = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <div>
-                      <h3 className="font-medium text-card-foreground">
+                      <h3 className="font-medium text-foreground">
                         Warehouse Inspection
                       </h3>
                       <p className="text-sm text-muted-foreground">
@@ -156,7 +156,7 @@ const RobotDetails = () => {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium text-card-foreground">
+                      <p className="text-sm font-medium text-foreground">
                         Progress
                       </p>
                       <p className="text-sm text-muted-foreground">67%</p>
