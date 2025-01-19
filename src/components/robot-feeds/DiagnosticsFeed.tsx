@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Terminal } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
+import { Database } from '@/integrations/supabase/types';
 
 interface DiagnosticLog {
   timestamp: string;
@@ -23,14 +25,18 @@ const DiagnosticsFeed = ({ robotId }: { robotId: string }) => {
           table: 'robots',
           filter: `id=eq.${robotId}`,
         },
-        (payload) => {
+        (payload: RealtimePostgresChangesPayload<{
+          [key: string]: any;
+        }>) => {
           console.log('Received diagnostic update:', payload);
-          const newLog: DiagnosticLog = {
-            timestamp: new Date().toLocaleTimeString(),
-            type: 'INFO',
-            message: `Status: ${payload.new.status}, CPU: ${payload.new.cpu_usage}%, RAM: ${payload.new.ram_usage}%`,
-          };
-          setLogs(prev => [newLog, ...prev].slice(0, 5)); // Keep last 5 logs
+          if (payload.new && typeof payload.new === 'object') {
+            const newLog: DiagnosticLog = {
+              timestamp: new Date().toLocaleTimeString(),
+              type: 'INFO',
+              message: `Status: ${payload.new.status || 'Unknown'}, CPU: ${payload.new.cpu_usage || 0}%, RAM: ${payload.new.ram_usage || 0}%`,
+            };
+            setLogs(prev => [newLog, ...prev].slice(0, 5)); // Keep last 5 logs
+          }
         }
       )
       .subscribe();
@@ -59,7 +65,7 @@ const DiagnosticsFeed = ({ robotId }: { robotId: string }) => {
             ${log.type === 'WARN' ? 'text-yellow-500' : ''}
             ${log.type === 'ERROR' ? 'text-red-500' : ''}
           `}>
-            [{log.type}] {log.message}
+            [{log.timestamp}] [{log.type}] {log.message}
           </div>
         ))}
       </div>

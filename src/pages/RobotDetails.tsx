@@ -37,7 +37,7 @@ const mockAlerts = [
 
 const RobotDetails = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id: robotId } = useParams<{ id: string }>();
   const [currentFeed, setCurrentFeed] = useState<FeedType>("camera");
 
   useEffect(() => {
@@ -50,6 +50,10 @@ const RobotDetails = () => {
     
     checkUser();
   }, [navigate]);
+
+  if (!robotId) {
+    return <div>Robot ID not found</div>;
+  }
 
   return (
     <SidebarProvider>
@@ -148,13 +152,13 @@ const RobotDetails = () => {
 
                   <div className="mt-4 h-[calc(100%-6rem)]">
                     <TabsContent value="camera" className="h-full m-0">
-                      <VideoFeed />
+                      <VideoFeed robotId={robotId} />
                     </TabsContent>
                     <TabsContent value="sensors" className="h-full m-0">
-                      <SensorsFeed />
+                      <SensorsFeed robotId={robotId} />
                     </TabsContent>
                     <TabsContent value="diagnostics" className="h-full m-0">
-                      <DiagnosticsFeed />
+                      <DiagnosticsFeed robotId={robotId} />
                     </TabsContent>
                   </div>
                 </Tabs>
