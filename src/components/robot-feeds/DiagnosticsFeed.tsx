@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Terminal } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
-import { Database } from '@/integrations/supabase/types';
 
 interface DiagnosticLog {
   timestamp: string;
@@ -10,48 +7,49 @@ interface DiagnosticLog {
   message: string;
 }
 
-type Robot = Database['public']['Tables']['robots']['Row'];
-
 const DiagnosticsFeed = ({ robotId }: { robotId: string }) => {
   const [logs, setLogs] = useState<DiagnosticLog[]>([]);
 
   useEffect(() => {
-    // Subscribe to real-time updates
-    const channel = supabase
-      .channel('robot-diagnostics')
-      .on(
-        'postgres_changes',
-        {
-          event: '*', // Listen to all changes
-          schema: 'public',
-          table: 'robots',
-          filter: `id=eq.${robotId}`,
-        },
-        (payload: RealtimePostgresChangesPayload<Robot>) => {
-          console.log('Received diagnostic update:', payload);
-          if (payload.new) {
-            const newLog: DiagnosticLog = {
-              timestamp: new Date().toLocaleTimeString(),
-              type: 'INFO',
-              message: `Status: ${payload.new.status || 'Unknown'}, CPU: ${payload.new.cpu_usage || 0}%, RAM: ${payload.new.ram_usage || 0}%`,
-            };
-            setLogs(prev => [newLog, ...prev].slice(0, 5)); // Keep last 5 logs
-          }
-        }
-      )
-      .subscribe();
+    // Generate initial dummy logs
+    const initialLogs: DiagnosticLog[] = [
+      {
+        timestamp: new Date().toLocaleTimeString(),
+        type: 'INFO',
+        message: 'System initialized',
+      },
+      {
+        timestamp: new Date(Date.now() - 5000).toLocaleTimeString(),
+        type: 'INFO',
+        message: 'Status: Online, CPU: 45%, RAM: 32%',
+      },
+      {
+        timestamp: new Date(Date.now() - 10000).toLocaleTimeString(),
+        type: 'WARN',
+        message: 'CPU usage above 40%',
+      }
+    ];
+    
+    setLogs(initialLogs);
 
-    // Add initial diagnostic log
-    setLogs([{
-      timestamp: new Date().toLocaleTimeString(),
-      type: 'INFO',
-      message: 'System initialized',
-    }]);
+    // Add new dummy log every 3 seconds
+    const interval = setInterval(() => {
+      const types: DiagnosticLog['type'][] = ['INFO', 'WARN', 'ERROR'];
+      const randomType = types[Math.floor(Math.random() * types.length)];
+      const cpuUsage = Math.floor(Math.random() * 100);
+      const ramUsage = Math.floor(Math.random() * 100);
+      
+      const newLog: DiagnosticLog = {
+        timestamp: new Date().toLocaleTimeString(),
+        type: randomType,
+        message: `Status: Online, CPU: ${cpuUsage}%, RAM: ${ramUsage}%`,
+      };
+      
+      setLogs(prev => [newLog, ...prev].slice(0, 5)); // Keep last 5 logs
+    }, 3000);
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [robotId]);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="w-full h-full bg-black/50 rounded-lg p-4 font-mono text-sm text-muted-foreground overflow-auto">

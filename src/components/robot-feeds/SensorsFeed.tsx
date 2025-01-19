@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
-import { supabase } from '@/integrations/supabase/client';
 
 interface SensorData {
   time: string;
@@ -11,60 +10,25 @@ const SensorsFeed = ({ robotId }: { robotId: string }) => {
   const [sensorData, setSensorData] = useState<SensorData[]>([]);
 
   useEffect(() => {
-    // Initial data fetch
-    const fetchInitialData = async () => {
-      try {
-        const { data: robot, error } = await supabase
-          .from('robots')
-          .select('temperature')
-          .eq('id', robotId)
-          .single();
-
-        if (error) {
-          console.error('Error fetching robot data:', error);
-          return;
-        }
-
-        if (robot) {
-          const newDataPoint = {
-            time: new Date().toLocaleTimeString(),
-            value: robot.temperature || 0,
-          };
-          setSensorData(prev => [...prev, newDataPoint].slice(-10)); // Keep last 10 readings
-        }
-      } catch (error) {
-        console.error('Error in fetchInitialData:', error);
+    // Generate dummy data
+    const generateDummyData = () => {
+      const data: SensorData[] = [];
+      for (let i = 0; i < 10; i++) {
+        data.push({
+          time: new Date(Date.now() - (9 - i) * 1000).toLocaleTimeString(),
+          value: Math.floor(Math.random() * 30) + 20, // Random temperature between 20-50
+        });
       }
+      setSensorData(data);
     };
 
-    fetchInitialData();
+    generateDummyData();
 
-    // Subscribe to real-time updates
-    const channel = supabase
-      .channel('robot-sensors')
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'robots',
-          filter: `id=eq.${robotId}`,
-        },
-        (payload) => {
-          console.log('Received sensor update:', payload);
-          const newDataPoint = {
-            time: new Date().toLocaleTimeString(),
-            value: payload.new.temperature || 0,
-          };
-          setSensorData(prev => [...prev, newDataPoint].slice(-10)); // Keep last 10 readings
-        }
-      )
-      .subscribe();
+    // Update dummy data every 2 seconds
+    const interval = setInterval(generateDummyData, 2000);
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [robotId]);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="w-full h-full bg-black/50 rounded-lg p-4">
