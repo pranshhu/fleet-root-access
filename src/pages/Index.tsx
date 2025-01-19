@@ -66,7 +66,7 @@ const Index = () => {
                 input: 'bg-[#2D2B35] border border-gray-700 text-white',
                 button: 'w-full',
                 divider: 'bg-gray-700',
-                anchorUnderline: 'text-primary hover:text-primary/80',
+                anchor: 'text-primary hover:text-primary/80',
               },
             }}
             theme="dark"
