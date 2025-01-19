@@ -4,7 +4,7 @@ import { Battery, ChevronLeft, Cpu, Gauge, MemoryStick as Memory, MonitorPlay, N
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardNav } from "@/components/DashboardNav";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -47,164 +47,107 @@ const RobotDetails = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background dark">
-        <main className="flex-1 p-8 space-y-8">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/robots")}
-              className="hover:bg-secondary"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </Button>
-            <h1 className="text-2xl font-bold">Robot-A1</h1>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-sm text-muted-foreground">Online</span>
+        <main className="flex-1 relative">
+          {/* Back button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/robots")}
+            className="absolute top-4 left-4 z-50 text-white bg-black/50 hover:bg-black/60"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </Button>
+
+          {/* Video feed container */}
+          <div className="relative w-full h-screen bg-black">
+            {/* Placeholder for video feed - replace with actual video component */}
+            <div className="absolute inset-0 flex items-center justify-center text-gray-500">
+              Live Robot Feed
+            </div>
+
+            {/* Overlay container */}
+            <div className="absolute inset-0 p-4">
+              {/* Top row - Title and Status */}
+              <div className="flex flex-col gap-4 mt-16 px-4">
+                <div className="flex items-center gap-4">
+                  <h1 className="text-2xl font-bold text-white">Robot-A1</h1>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-green-500" />
+                    <span className="text-sm text-white/80">Online</span>
+                  </div>
+                </div>
+
+                {/* Status Indicators */}
+                <div className="flex items-center gap-4 bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm w-fit text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <Battery className="h-4 w-4 text-green-500" />
+                    <span className="text-white font-medium">87%</span>
+                  </div>
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <Thermometer className="h-4 w-4 text-yellow-500" />
+                    <span className="text-white font-medium">42°C</span>
+                  </div>
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <Signal className="h-4 w-4 text-blue-500" />
+                    <span className="text-white font-medium">95%</span>
+                  </div>
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <Memory className="h-4 w-4 text-purple-500" />
+                    <span className="text-white font-medium">32%</span>
+                  </div>
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <Cpu className="h-4 w-4 text-emerald-500" />
+                    <span className="text-white font-medium">45%</span>
+                  </div>
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <MonitorPlay className="h-4 w-4 text-pink-500" />
+                    <span className="text-white font-medium">60 FPS</span>
+                  </div>
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <Network className="h-4 w-4 text-orange-500" />
+                    <span className="text-white font-medium">24ms</span>
+                  </div>
+                  <div className="w-px h-3 bg-white/20" />
+                  <div className="flex items-center gap-1.5">
+                    <Gauge className="h-4 w-4 text-indigo-500" />
+                    <span className="text-white font-medium">1.2 m/s</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Alerts overlay - bottom */}
+              <div className="absolute bottom-4 left-4 right-4">
+                <Card className="bg-black/50 border-0 backdrop-blur-sm text-white p-4">
+                  <h3 className="font-semibold mb-3">Recent Alerts</h3>
+                  <div className="space-y-2">
+                    {mockAlerts.map((alert) => (
+                      <div
+                        key={alert.id}
+                        className="flex items-center gap-2 text-sm"
+                      >
+                        <div 
+                          className={cn(
+                            "w-2 h-2 rounded-full",
+                            alert.severity === "critical" && "bg-red-500",
+                            alert.severity === "warning" && "bg-yellow-500",
+                            alert.severity === "info" && "bg-blue-500"
+                          )}
+                        />
+                        <span className="flex-1">{alert.message}</span>
+                        <span className="text-white/60">{alert.timestamp}</span>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
             </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="bg-card/50 backdrop-blur-sm border-muted">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-lg bg-primary/10">
-                    <Battery className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Battery</p>
-                    <p className="text-2xl font-semibold">87%</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-muted">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-lg bg-primary/10">
-                    <Thermometer className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Temperature</p>
-                    <p className="text-2xl font-semibold">42°C</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-muted">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-lg bg-primary/10">
-                    <Signal className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Signal</p>
-                    <p className="text-2xl font-semibold">95%</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-muted">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-lg bg-primary/10">
-                    <Gauge className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Speed</p>
-                    <p className="text-2xl font-semibold">1.2 m/s</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Card className="bg-card/50 backdrop-blur-sm border-muted">
-              <CardHeader>
-                <CardTitle className="text-lg font-medium">System Resources</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">CPU Usage</span>
-                    <span className="text-foreground">45%</span>
-                  </div>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full w-[45%] bg-primary rounded-full" />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">RAM Usage</span>
-                    <span className="text-foreground">32%</span>
-                  </div>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full w-[32%] bg-primary rounded-full" />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Storage</span>
-                    <span className="text-foreground">78%</span>
-                  </div>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full w-[78%] bg-primary rounded-full" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/50 backdrop-blur-sm border-muted">
-              <CardHeader>
-                <CardTitle className="text-lg font-medium">Current Mission</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h3 className="font-medium text-foreground">Warehouse Inspection</h3>
-                      <p className="text-sm text-muted-foreground">Started 45 minutes ago</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium text-foreground">Progress</p>
-                      <p className="text-sm text-muted-foreground">67%</p>
-                    </div>
-                  </div>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full w-[67%] bg-primary rounded-full" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card className="bg-card/50 backdrop-blur-sm border-muted">
-            <CardHeader>
-              <CardTitle className="text-lg font-medium">Recent Alerts</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {mockAlerts.map((alert) => (
-                  <div
-                    key={alert.id}
-                    className="flex items-center gap-3 p-3 rounded-lg bg-muted/50"
-                  >
-                    <div 
-                      className={cn(
-                        "w-2 h-2 rounded-full",
-                        alert.severity === "critical" && "bg-red-500",
-                        alert.severity === "warning" && "bg-yellow-500",
-                        alert.severity === "info" && "bg-blue-500"
-                      )}
-                    />
-                    <span className="flex-1 text-sm">{alert.message}</span>
-                    <span className="text-sm text-muted-foreground">{alert.timestamp}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
         </main>
         <DashboardNav />
       </div>
