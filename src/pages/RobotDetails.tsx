@@ -1,12 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Battery, ChevronLeft, Cpu, Gauge, MemoryStick as Memory, MonitorPlay, Network, Signal, Thermometer } from "lucide-react";
+import { Battery, Camera, ChevronLeft, Cpu, Gauge, MemoryStick as Memory, MonitorPlay, Network, Signal, Thermometer, Activity, Terminal } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardNav } from "@/components/DashboardNav";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import VideoFeed from "@/components/robot-feeds/VideoFeed";
+import SensorsFeed from "@/components/robot-feeds/SensorsFeed";
+import DiagnosticsFeed from "@/components/robot-feeds/DiagnosticsFeed";
+
+type FeedType = "camera" | "sensors" | "diagnostics";
 
 const mockAlerts = [
   {
@@ -32,6 +38,7 @@ const mockAlerts = [
 const RobotDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [currentFeed, setCurrentFeed] = useState<FeedType>("camera");
 
   useEffect(() => {
     const checkUser = async () => {
@@ -58,17 +65,11 @@ const RobotDetails = () => {
             <ChevronLeft className="h-6 w-6" />
           </Button>
 
-          {/* Video feed container */}
-          <div className="relative w-full h-screen bg-black">
-            {/* Placeholder for video feed - replace with actual video component */}
-            <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-              Live Robot Feed
-            </div>
-
-            {/* Overlay container */}
+          {/* Main content */}
+          <div className="relative w-full h-screen bg-background p-4">
             <div className="absolute inset-0 p-4">
               {/* Top row - Title and Status */}
-              <div className="flex flex-col gap-4 mt-16 px-4">
+              <div className="flex flex-col gap-4 mt-16 px-4 mb-6">
                 <div className="flex items-center gap-4">
                   <h1 className="text-2xl font-bold text-white">Robot-A1</h1>
                   <div className="flex items-center gap-2">
@@ -119,6 +120,44 @@ const RobotDetails = () => {
                     <span className="text-white font-medium">1.2 m/s</span>
                   </div>
                 </div>
+              </div>
+
+              {/* Feed Selection and Display */}
+              <div className="flex-1 mb-4">
+                <Tabs value={currentFeed} onValueChange={(value) => setCurrentFeed(value as FeedType)} className="h-full">
+                  <TabsList className="bg-black/50 border-none">
+                    <TabsTrigger value="camera" className="data-[state=active]:bg-white/10">
+                      <div className="flex items-center gap-2">
+                        <Camera className="w-4 h-4" />
+                        <span>Camera</span>
+                      </div>
+                    </TabsTrigger>
+                    <TabsTrigger value="sensors" className="data-[state=active]:bg-white/10">
+                      <div className="flex items-center gap-2">
+                        <Activity className="w-4 h-4" />
+                        <span>Sensors</span>
+                      </div>
+                    </TabsTrigger>
+                    <TabsTrigger value="diagnostics" className="data-[state=active]:bg-white/10">
+                      <div className="flex items-center gap-2">
+                        <Terminal className="w-4 h-4" />
+                        <span>Diagnostics</span>
+                      </div>
+                    </TabsTrigger>
+                  </TabsList>
+
+                  <div className="mt-4 h-[calc(100%-6rem)]">
+                    <TabsContent value="camera" className="h-full m-0">
+                      <VideoFeed />
+                    </TabsContent>
+                    <TabsContent value="sensors" className="h-full m-0">
+                      <SensorsFeed />
+                    </TabsContent>
+                    <TabsContent value="diagnostics" className="h-full m-0">
+                      <DiagnosticsFeed />
+                    </TabsContent>
+                  </div>
+                </Tabs>
               </div>
 
               {/* Alerts overlay - bottom */}
