@@ -10,6 +10,8 @@ interface DiagnosticLog {
   message: string;
 }
 
+type Robot = Database['public']['Tables']['robots']['Row'];
+
 const DiagnosticsFeed = ({ robotId }: { robotId: string }) => {
   const [logs, setLogs] = useState<DiagnosticLog[]>([]);
 
@@ -25,11 +27,9 @@ const DiagnosticsFeed = ({ robotId }: { robotId: string }) => {
           table: 'robots',
           filter: `id=eq.${robotId}`,
         },
-        (payload: RealtimePostgresChangesPayload<{
-          [key: string]: any;
-        }>) => {
+        (payload: RealtimePostgresChangesPayload<Robot>) => {
           console.log('Received diagnostic update:', payload);
-          if (payload.new && typeof payload.new === 'object') {
+          if (payload.new) {
             const newLog: DiagnosticLog = {
               timestamp: new Date().toLocaleTimeString(),
               type: 'INFO',

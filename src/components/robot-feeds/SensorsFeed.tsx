@@ -13,18 +13,27 @@ const SensorsFeed = ({ robotId }: { robotId: string }) => {
   useEffect(() => {
     // Initial data fetch
     const fetchInitialData = async () => {
-      const { data: robot } = await supabase
-        .from('robots')
-        .select('temperature')
-        .eq('id', robotId)
-        .single();
+      try {
+        const { data: robot, error } = await supabase
+          .from('robots')
+          .select('temperature')
+          .eq('id', robotId)
+          .single();
 
-      if (robot) {
-        const newDataPoint = {
-          time: new Date().toLocaleTimeString(),
-          value: robot.temperature || 0,
-        };
-        setSensorData(prev => [...prev, newDataPoint].slice(-10)); // Keep last 10 readings
+        if (error) {
+          console.error('Error fetching robot data:', error);
+          return;
+        }
+
+        if (robot) {
+          const newDataPoint = {
+            time: new Date().toLocaleTimeString(),
+            value: robot.temperature || 0,
+          };
+          setSensorData(prev => [...prev, newDataPoint].slice(-10)); // Keep last 10 readings
+        }
+      } catch (error) {
+        console.error('Error in fetchInitialData:', error);
       }
     };
 
