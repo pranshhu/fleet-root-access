@@ -1,20 +1,66 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { supabase } from '@/integrations/supabase/client';
 
-const mockData = [
-  { time: '00:00', value: 65 },
-  { time: '00:01', value: 68 },
-  { time: '00:02', value: 71 },
-  { time: '00:03', value: 69 },
-  { time: '00:04', value: 72 },
-  { time: '00:05', value: 70 },
-];
+interface SensorData {
+  time: string;
+  value: number;
+}
 
-const SensorsFeed = () => {
+const SensorsFeed = ({ robotId }: { robotId: string }) => {
+  const [sensorData, setSensorData] = useState<SensorData[]>([]);
+
+  useEffect(() => {
+    // Initial data fetch
+    const fetchInitialData = async () => {
+      const { data: robot } = await supabase
+        .from('robots')
+        .select('temperature')
+        .eq('id', robotId)
+        .single();
+
+      if (robot) {
+        const newDataPoint = {
+          time: new Date().toLocaleTimeString(),
+          value: robot.temperature || 0,
+        };
+        setSensorData(prev => [...prev, newDataPoint].slice(-10)); // Keep last 10 readings
+      }
+    };
+
+    fetchInitialData();
+
+    // Subscribe to real-time updates
+    const channel = supabase
+      .channel('robot-sensors')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'robots',
+          filter: `id=eq.${robotId}`,
+        },
+        (payload) => {
+          console.log('Received sensor update:', payload);
+          const newDataPoint = {
+            time: new Date().toLocaleTimeString(),
+            value: payload.new.temperature || 0,
+          };
+          setSensorData(prev => [...prev, newDataPoint].slice(-10)); // Keep last 10 readings
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [robotId]);
+
   return (
     <div className="w-full h-full bg-black/50 rounded-lg p-4">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={mockData}>
+        <LineChart data={sensorData}>
           <CartesianGrid strokeDasharray="3 3" stroke="#333" />
           <XAxis dataKey="time" stroke="#666" />
           <YAxis stroke="#666" />
