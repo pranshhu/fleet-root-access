@@ -1,7 +1,5 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { Bot, Battery, Signal, Thermometer } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { DashboardNav } from "@/components/DashboardNav";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { RobotCard } from "@/components/ui/robot-card";
@@ -39,19 +37,6 @@ const mockRobots = [
 ];
 
 const Robots = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/");
-      }
-    };
-    
-    checkUser();
-  }, [navigate]);
-
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-[#1A1F2C] dark">

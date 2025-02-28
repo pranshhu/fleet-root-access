@@ -1,3 +1,4 @@
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Sidebar,
@@ -15,12 +16,10 @@ import {
   Bell,
   Users2,
   Settings,
-  LogOut,
   Maximize2,
   Minimize2
 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import { supabase } from "@/integrations/supabase/client"
 import { toast } from "sonner"
 import { useState, useEffect } from "react"
 
@@ -36,12 +35,6 @@ const navigationItems = [
 export function DashboardNav() {
   const navigate = useNavigate()
   const [isFullscreen, setIsFullscreen] = useState(false)
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    toast.success("Successfully signed out!")
-    navigate("/")
-  }
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -104,16 +97,6 @@ export function DashboardNav() {
               ) : (
                 <Maximize2 className="h-5 w-5" />
               )}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              onClick={handleSignOut}
-              className="w-full flex justify-center p-2 text-red-400 hover:text-red-300 hover:bg-sidebar-accent"
-              tooltip="Sign Out"
-            >
-              <LogOut className="h-5 w-5" />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
